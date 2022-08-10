@@ -471,6 +471,10 @@ func decrypt(identities []age.Identity, in io.Reader, out io.Writer) {
 }
 
 func passphrasePromptForDecryption() (string, error) {
+	if pass, ok := os.LookupEnv("SECRET_PASSPHRASE"); ok {
+		fmt.Fprintln(os.Stderr, "using passphrase from environment variable.")
+		return pass, nil
+	}
 	pass, err := readSecret("Enter passphrase:")
 	if err != nil {
 		return "", fmt.Errorf("could not read passphrase: %v", err)
