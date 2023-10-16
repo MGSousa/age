@@ -287,6 +287,10 @@ func main() {
 }
 
 func passphrasePromptForEncryption() (string, error) {
+	if pass, ok := os.LookupEnv("SECRET_PASSPHRASE"); ok {
+		fmt.Fprintln(os.Stderr, "using passphrase from environment variable.")
+		return pass, nil
+	}
 	pass, err := readSecret("Enter passphrase (leave empty to autogenerate a secure one):")
 	if err != nil {
 		return "", fmt.Errorf("could not read passphrase: %v", err)
